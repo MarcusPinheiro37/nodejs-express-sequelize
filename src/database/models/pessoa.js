@@ -30,7 +30,17 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         paranoid: true,
         modelName: 'Pessoa',
-        tableName: 'tb_pessoas'
+        tableName: 'tb_pessoas',
+        defaultScope: {
+            where:{
+                ativo: true
+            }
+        },
+        scopes: {
+            todosRegistros: {
+                where: {}
+            }
+        }
     });
     return Pessoa;
 };

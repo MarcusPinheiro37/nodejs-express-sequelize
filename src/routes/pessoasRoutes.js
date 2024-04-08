@@ -8,6 +8,7 @@ const matriculaControler = new MatriculaControler();
 const router = Router();
 
 router.get('/pessoas', (req, res, next) => pessoaControler.getDados(req, res, next));
+router.get('/pessoas/todos', (req, res, next) => pessoaControler.getTodasPessoas(req, res, next));
 router.get('/pessoas/:id', (req, res, next) => pessoaControler.getDadosID(req, res, next));
 router.post('/pessoas', (req, res, next) => pessoaControler.postDados(req, res, next));
 router.put('/pessoas/:id', (req, res, next) => pessoaControler.putDados(req, res, next));

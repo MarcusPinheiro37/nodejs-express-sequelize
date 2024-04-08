@@ -7,6 +7,11 @@ class Services{
     async getRegistros(){
         return ds[this.model].findAll();
     }
+
+    async getRegistrosEscopo(escopo){
+        return ds[this.model].scope(escopo).findAll();
+    }
+
     async getRegistroID(id){
         const idDados = parseInt(id);
         return ds[this.model].findByPk(idDados);
