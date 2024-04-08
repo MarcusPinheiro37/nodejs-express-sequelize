@@ -1,4 +1,4 @@
-const ds = require('../models');
+const ds = require('../database/models');
 
 class Services{
     constructor(nomeModel){
