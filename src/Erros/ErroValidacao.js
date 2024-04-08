@@ -5,7 +5,7 @@ class ErroValidacao extends ErroBase {
         const mensagensErro = Object.values(err.errors)
             .map(error => error.message)
             .join('; ');
-        super(`Os seguintes erros ocorreram: ${mensagensErro}`);
+        super(`Os seguintes erros ocorreram: ${mensagensErro}`, 400);
     }
 }
 
