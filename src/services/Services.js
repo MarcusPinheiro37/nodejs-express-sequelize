@@ -7,14 +7,15 @@ class Services{
     async getRegistros(){
         return ds[this.model].findAll();
     }
-
     async getRegistrosEscopo(escopo){
         return ds[this.model].scope(escopo).findAll();
     }
-
     async getRegistroID(id){
         const idDados = parseInt(id);
         return ds[this.model].findByPk(idDados);
+    }
+    async getUmRegistro(where){
+        return ds[this.model].findOne( { where: { ...where } } );
     }
     async postRegistros(dadosRegistro){
         return ds[this.model].create(dadosRegistro);

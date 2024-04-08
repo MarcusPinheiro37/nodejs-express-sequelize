@@ -25,6 +25,20 @@ class Controller{
         }
     }
 
+    async getUmDado(req,res,next){
+        const { ...params } = req.params;
+        try {
+            const listaDados = await this.entidadeService.getUmRegistro(params);
+            if(listaDados !== null){
+                return res.status(200).json(listaDados);
+            } else{
+                next(new NaoEncontrado('ID da pessoa não encontrado'));
+            }
+        } catch (error) {
+            next();
+        }
+    }
+
     async postDados(req, res, next) {
         const dados = req.body;
         try {

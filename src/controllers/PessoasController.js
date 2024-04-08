@@ -9,7 +9,7 @@ module.exports = class PessoaControler extends Controller {
     }
 
     async getMatriculasAtivas(req, res, next){
-        const {estudanteId} = req.params;
+        const estudanteId = req.params.estudante_id;
         try {
             const listaMatriculas = await pessoaServices.pegaMatriculasAtivasEstudante(Number(estudanteId));
             return res.status(200).json(listaMatriculas);
@@ -17,8 +17,9 @@ module.exports = class PessoaControler extends Controller {
             next(error);
         }
     }
+    
     async getMatriculas(req, res, next){
-        const {estudanteId} = req.params;
+        const estudanteId = req.params.estudante_id;
         try {
             const listaMatriculas = await pessoaServices.pegaMatriculasEstudante(Number(estudanteId));
             return res.status(200).json(listaMatriculas);
