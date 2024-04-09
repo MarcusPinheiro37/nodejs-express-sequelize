@@ -18,5 +18,8 @@ router.get('/pessoas/:estudante_id/matriculas', (req, res, next) => pessoaContro
 router.get('/pessoas/:estudante_id/matriculas/todos', (req, res, next) => pessoaControler.getMatriculas(req, res, next));
 router.get('/pessoas/:estudante_id/matriculas/:id', (req, res, next) => matriculaControler.getUmDado(req, res, next));
 router.post('/pessoas/:estudante_id/matriculas', (req, res, next) => matriculaControler.postDados(req, res, next));
+router.put('/pessoas/:estudante_id/matriculas/:id', (req, res, next) => matriculaControler.putDados(req, res, next));
+router.delete('/pessoas/:estudante_id/matriculas/:id', (req, res, next) => matriculaControler.deleteDados(req, res, next));
+
 
 module.exports = router;

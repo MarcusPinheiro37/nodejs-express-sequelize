@@ -1,4 +1,5 @@
 const NaoEncontrado = require('../Erros/Erro404.js');
+const convertteIds = require('../utils/conversorStringHelper.js');
 class Controller{
     constructor(entidadeService){
         this.entidadeService = entidadeService;
@@ -27,8 +28,9 @@ class Controller{
 
     async getUmDado(req,res,next){
         const { ...params } = req.params;
+        const where = convertteIds(params);
         try {
-            const listaDados = await this.entidadeService.getUmRegistro(params);
+            const listaDados = await this.entidadeService.getUmRegistro(where);
             if(listaDados !== null){
                 return res.status(200).json(listaDados);
             } else{
