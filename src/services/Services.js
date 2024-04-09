@@ -5,7 +5,7 @@ class Services{
         this.model = nomeModel;
     }
     async getRegistros(where = {}){
-        return ds[this.model].findAll({where});
+        return ds[this.model].findAll({ where: { ...where }});
     }
     async getRegistrosEscopo(escopo){
         return ds[this.model].scope(escopo).findAll();
@@ -31,9 +31,13 @@ class Services{
         }
         return true;
     }
-    async putRegistro(dadosRegistro, id){
-        const idDados = parseInt(id);
-        const listaRegistrosAtualizados = await ds[this.model].update( dadosRegistro, { where: { id: idDados }});
+    async putRegistro(dadosRegistro, where, transacao = {}){
+        const listaRegistrosAtualizados = await ds[this.model]
+            .update( dadosRegistro,
+                { 
+                    where: {...where},
+                    transacao
+                });
         if(listaRegistrosAtualizados[0] === 0){
             return false;
         }
