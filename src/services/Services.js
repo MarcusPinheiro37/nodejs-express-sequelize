@@ -4,8 +4,8 @@ class Services{
     constructor(nomeModel){
         this.model = nomeModel;
     }
-    async getRegistros(){
-        return ds[this.model].findAll();
+    async getRegistros(where = {}){
+        return ds[this.model].findAll({where});
     }
     async getRegistrosEscopo(escopo){
         return ds[this.model].scope(escopo).findAll();
@@ -16,6 +16,9 @@ class Services{
     }
     async getUmRegistro(where){
         return ds[this.model].findOne( { where: { ...where } } );
+    }
+    async getCountRegistros(options){
+        return ds[this.model].findAndCountAll({ ...options });
     }
     async postRegistros(dadosRegistro){
         return ds[this.model].create(dadosRegistro);
