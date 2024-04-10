@@ -1,0 +1,511 @@
+openapi: 3.0.0
+info:
+  title: Sistema de Gestão Acadêmica
+  description: API para gerenciamento de pessoas, matrículas, cursos e categorias.
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:3000'
+    description: Servidor de Desenvolvimento
+paths:
+  /pessoas:
+    get:
+      summary: Lista todas as pessoas
+      tags:
+        - Pessoas
+      responses:
+        '200':
+          description: Uma lista de pessoas.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pessoa'
+    post:
+      summary: Cria uma nova pessoa
+      tags:
+        - Pessoas
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PessoaBase'
+      responses:
+        '201':
+          description: Pessoa criada com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pessoa'
+  /pessoas/{id}:
+    get:
+      summary: Busca uma pessoa pelo ID
+      tags:
+        - Pessoas
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detalhes de uma pessoa.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pessoa'
+    put:
+      summary: Atualiza os dados de uma pessoa
+      tags:
+        - Pessoas
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nome:
+                  type: string
+                ativo:
+                  type: boolean
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Pessoa atualizada com sucesso.
+        '404':
+          description: Pessoa não encontrada.
+    delete:
+      summary: Remove uma pessoa pelo ID
+      tags:
+        - Pessoas
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Pessoa removida com sucesso.
+        '404':
+          description: Pessoa não encontrada.
+  /pessoas/{estudante_id}/matriculas:
+    get:
+      summary: Lista as matrículas ativas de um estudante
+      tags:
+        - Matrículas
+      parameters:
+        - name: estudante_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Uma lista de matrículas ativas.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Matricula'
+    post:
+      summary: Cria uma nova matrícula para um estudante
+      tags:
+        - Matrículas
+      parameters:
+        - name: estudante_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MatriculaBase'
+      responses:
+        '201':
+          description: Matricula criada com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Matricula'
+  /pessoas/{estudante_id}/matriculas/{id}:
+    put:
+      summary: Atualiza os dados de uma matrícula de um estudante
+      tags:
+        - Matrículas
+      parameters:
+        - name: estudante_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+      responses:
+        '200':
+          description: Matrícula atualizada com sucesso.
+        '404':
+          description: Matrícula não encontrada.
+    delete:
+      summary: Remove uma matrícula de um estudante pelo ID
+      tags:
+        - Matrículas
+      parameters:
+        - name: estudante_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Matrícula removida com sucesso.
+        '404':
+          description: Matrícula não encontrada.
+  /pessoas/{estudante_id}/cancela:
+    put:
+      summary: Cancela todas as matrículas ativas de um estudante
+      tags:
+        - Matrículas
+      parameters:
+        - name: estudante_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Todas as matrículas do estudante foram canceladas com sucesso.
+        '404':
+          description: Estudante não encontrado.
+  /pessoas/matriculas/lotadas:
+    get:
+      summary: Lista cursos com matrículas lotadas
+      tags:
+        - Matrículas
+      parameters:
+        - name: lotacaoCurso
+          in: query
+          required: false
+          description: O número mínimo de matrículas para considerar o curso como lotado.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de cursos lotados.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    curso_id:
+                      type: integer
+                    total_matriculas:
+                      type: integer
+        '404':
+          description: Nenhum curso encontrado com os critérios especificados.
+  /cursos:
+    get:
+      summary: Lista todos os cursos
+      tags:
+        - Cursos
+      responses:
+        '200':
+          description: Uma lista de cursos.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Curso'
+    post:
+      summary: Cria um novo curso
+      tags:
+        - Cursos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CursoBase'
+      responses:
+        '201':
+          description: Curso criada com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Curso'
+  /cursos/{id}:
+    put:
+      summary: Atualiza os dados de um curso
+      tags:
+        - Cursos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nome:
+                  type: string
+                descricao:
+                  type: string
+      responses:
+        '200':
+          description: Curso atualizado com sucesso.
+        '404':
+          description: Curso não encontrado.
+    delete:
+      summary: Remove um curso pelo ID
+      tags:
+        - Cursos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Curso removido com sucesso.
+        '404':
+          description: Curso não encontrado.
+  /categorias:
+    get:
+      summary: Lista todas as categorias
+      tags:
+        - Categorias
+      responses:
+        '200':
+          description: Uma lista de categorias.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Categoria'
+    post:
+      summary: Cria uma nova categoria
+      tags:
+        - Categorias
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoriaBase'
+      responses:
+        '201':
+          description: Categoria criada com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Categoria'
+  /categorias/{id}:
+    put:
+      summary: Atualiza os dados de uma categoria
+      tags:
+        - Categorias
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nome:
+                  type: string
+      responses:
+        '200':
+          description: Categoria atualizada com sucesso.
+        '404':
+          description: Categoria não encontrada.
+    delete:
+      summary: Remove uma categoria pelo ID
+      tags:
+        - Categorias
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Categoria removida com sucesso.
+        '404':
+          description: Categoria não encontrada.
+
+components:
+  responses:
+    BadRequest:
+      description: A requisição possui formato inválido, parâmetros ausentes ou dados incompatíveis.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Autenticação necessária e falhou ou ainda não foi fornecida.
+    NotFound:
+      description: O recurso solicitado não foi encontrado.
+    InternalServerError:
+      description: Erro interno do servidor.
+  schemas:
+    PessoaBase:
+      type: object
+      properties:
+        nome:
+          type: string
+        email:
+          type: string
+        cpf:
+          type: string
+        ativo:
+          type: boolean
+        role:
+          type: string
+    Pessoa:
+      allOf:
+        - $ref: '#/components/schemas/PessoaBase'
+        - type: object
+          properties:
+            id:
+              type: integer
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+            deletedAt:
+              type: string
+              format: date-time
+    MatriculaBase:
+      type: object
+      properties:
+        curso_id:
+          type: integer
+        estudante_id:
+          type: integer
+        status:
+          type: string
+    Matricula:
+      allOf:
+        - $ref: '#/components/schemas/MatriculaBase'
+        - type: object
+          properties:
+            id:
+              type: integer
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+            deletedAt:
+              type: string
+              format: date-time
+    CursoBase:
+      type: object
+      properties:
+        titulo:
+          type: integer
+        descricao:
+          type: string
+        data_inicio:
+          type: string
+          format: date
+        categoria_id:
+          type: integer
+        docente_id:
+          type: integer        
+    Curso:
+      allOf:
+        - $ref: '#/components/schemas/CursoBase'
+        - type: object
+          properties:
+            id:
+              type: integer
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+            deletedAt:
+              type: string
+              format: date-time
+    CategoriaBase:
+      type: object
+      properties:
+        titulo:
+          type: string
+    Categoria:
+      allOf:
+        - $ref: '#/components/schemas/CategoriaBase'
+        - type: object
+          properties:
+            id:
+              type: integer
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+            deletedAt:
+              type: string
+              format: date-time
+    Error:
+      type: object
+      properties:
+        status:
+          type: integer
+        message:
+          type: string
+
